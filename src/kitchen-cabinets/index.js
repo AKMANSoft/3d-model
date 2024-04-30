@@ -1,0 +1,5886 @@
+import React, { Suspense, useRef, useState, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { ContactShadows, Environment, useGLTF, OrbitControls } from '@react-three/drei';
+import { HexColorPicker } from 'react-colorful';
+import { proxy, useSnapshot } from 'valtio';
+
+const stateVillage = proxy({
+  current: null,
+  items: {
+    Window: '#fff',
+    window_Glass: '#fff',
+    Tree: '#fff',
+    Vazo: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Other_Object: '#fff',
+    Lights: '#fff',
+    Lights: '#fff',
+    Lights: '#fff',
+    Lights: '#fff',
+    Window: '#fff',
+    Window: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    Base_Build: '#fff',
+    material: '#fff',
+    Cabinet_glass: '#fff',
+    Big_Cabinet: '#fff',
+    Big_Cabinet: '#fff',
+    Big_Cabinet: '#fff',
+    Big_Cabinet: '#fff',
+    Freezer: '#fff',
+    Chair: '#fff',
+    Chair: '#fff',
+    Chair: '#fff',
+    Chair: '#fff',
+    Chair: '#fff',
+    Chair: '#fff',
+    Tezgah: '#fff',
+    Tezgah: '#fff',
+    up_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Down_Cabinet: '#fff',
+    Commode: '#fff'
+  },
+});
+
+export function VillageModel(props) {
+  const ref = useRef();
+  const snap = useSnapshot(stateVillage);
+
+  const { nodes, materials } = useGLTF('/kitchen_cabinets.glb');
+
+  useFrame(() => {
+    // No need for automatic animation if you've commented it out
+  });
+
+  const [hovered, set] = useState(null);
+  useEffect(() => {
+    const cursor = `<svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0)"><path fill="rgba(255, 255, 255, 0.5)" d="M29.5 54C43.031 54 54 43.031 54 29.5S43.031 5 29.5 5 5 15.969 5 29.5 15.969 54 29.5 54z" stroke="#000"/><g filter="url(#filter0_d)"><path d="M29.5 47C39.165 47 47 39.165 47 29.5S39.165 12 29.5 12 12 19.835 12 29.5 19.835 47 29.5 47z" fill="${snap.items[hovered]}"/></g><path d="M2 2l11 2.947L4.947 13 2 2z" fill="#000"/><text fill="#000" style="white-space:pre" font-family="Inter var, sans-serif" font-size="10" letter-spacing="-.01em"><tspan x="35" y="63">${hovered}</tspan></text></g><defs><clipPath id="clip0"><path fill="#fff" d="M0 0h64v64H0z"/></clipPath><filter id="filter0_d" x="6" y="8" width="47" height="47" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feOffset dy="2"/><feGaussianBlur stdDeviation="3"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/><feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/><feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/></filter></defs></svg>`;
+    const auto = `<svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255, 255, 255, 0.5)" d="M29.5 54C43.031 54 54 43.031 54 29.5S43.031 5 29.5 5 5 15.969 5 29.5 15.969 54 29.5 54z" stroke="#000"/><path d="M2 2l11 2.947L4.947 13 2 2z" fill="#000"/></svg>`;
+    document.body.style.cursor = `url('data:image/svg+xml;base64,${btoa(hovered ? cursor : auto)}'), auto`;
+  }, [hovered]);
+
+  useEffect(() => {
+    if (materials) {
+      Object.keys(snap.items).forEach((item) => {
+        const material = materials[item];
+        if (material) {
+          material.color.set(snap.items[item]);
+        }
+      });
+    }
+  }, [snap.items, materials]);
+
+  return (
+    <group
+      {...props}
+      dispose={null}
+      ref={ref}
+      onPointerOver={(e) => (e.stopPropagation(), set(e.object.material.name))}
+      onPointerOut={(e) => e.intersections.length === 0 && set(null)}
+      onPointerMissed={() => (stateVillage.current = null)}
+      onPointerDown={(e) => (e.stopPropagation(), (stateVillage.current = e.object.material.name))}
+      scale={2.5}
+    >
+      <group rotation={[-Math.PI / 2, 0, 0]}>
+        <lineSegments
+          geometry={nodes.Material2.geometry}
+          material={materials.edge_color000255}
+        />
+        <group position={[-77.625, 76.125, 54]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_1.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.667, 0.75, 1.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_2.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <group position={[42.25, 1.5, 0.75]}>
+            {/* <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_3.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_4.geometry}
+              material={materials["Wood09-basecolor"]}
+            /> */}
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_5.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[42.25, 1.5, 23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_6.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[42.25, 1.5, 12.25]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_7.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_8.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_9.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[42.25, 1.5, 35.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_10.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_11.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_12.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[40.938, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_13.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[38.5, 0.75, 34.5]}
+          />
+          <group position={[32.417, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_14.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_15.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_16.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_17.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[44.313, 12.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_18.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[47.75, 1.5, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_19.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[48, 0.75, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_20.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[15.333, 0.75, 1.5]}
+          />
+          <group position={[0, 0.75, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_21.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_22.geometry}
+              material={materials.material}
+            />
+          </group>
+          <group position={[17.083, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_23.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_24.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_25.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[-29.625, 76.125, 66.25]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_26.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[29.75, 1.5, -12.25]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_27.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[20.5, 0.75, 22.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_28.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30, 0.75, -12.25]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_29.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[14, 0.75, -10.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_30.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[24.25, 1.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_31.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, -12.25]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_32.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[26.313, 12.5, -11.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_33.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, -12.25]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_34.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[24.25, 1.5, 23]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_35.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[22.938, 0.75, 0]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_36.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_37.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[15.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_38.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_39.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[-77.625, 64.875, 0]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_40.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17.083, 0, 4]}
+          />
+          <group position={[32.417, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_41.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_42.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_43.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1.75, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_44.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_45.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_46.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[2, 0.75, 33.5]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_47.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_48.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_49.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[17.083, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_50.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_51.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_52.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[32.417, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_53.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_54.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_55.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_56.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[47, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_57.geometry}
+            material={materials["Plastic03-basecolor"]}
+            position={[0, 3.75, 0]}
+          />
+          <group position={[1.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_58.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_59.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_60.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_61.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 28]}
+          />
+          <group position={[1, 23, 33]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_62.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_63.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1, 23.75, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_64.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_65.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_66.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_67.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17.333, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_68.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[15.333, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_69.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[32.667, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_70.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_71.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 4]}
+          />
+          <group position={[1, 1.5, 4.75]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_72.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_73.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_74.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[46, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_75.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.667, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_76.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 18.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_77.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 4]}
+          />
+        </group>
+        <group position={[0.375, 76.125, 54]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_78.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[66.25, 1.5, 23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_79.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[71.75, 1.5, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <group position={[54.25, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_80.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_81.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_82.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[66.25, 1.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_83.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_84.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[64.938, 0.75, 0]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_85.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_86.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_87.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[35, 0.75, 1.5]}
+          />
+          <group position={[36.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_88.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_89.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_90.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[52.5, 0.75, 1.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_91.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[72, 0.75, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_92.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[62.5, 0.75, 34.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_93.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17.5, 0.75, 1.5]}
+          />
+          <group position={[68.313, 12.5, 0.75]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_94.geometry}
+              material={materials.material}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_95.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_96.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_97.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[66.25, 1.5, 12.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_98.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[66.25, 1.5, 35.25]}
+          />
+          <group position={[19.25, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_99.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_100.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[0.375, 64.875, 0]}>
+          <group position={[2, 0.75, 33.5]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_101.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_102.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_103.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[70, 0.75, 4]}
+          />
+          <group position={[54.25, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_104.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_105.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_106.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[19.25, 0, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_107.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 4]}
+          />
+          <group position={[1.75, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_108.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_109.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[36.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_110.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_111.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_112.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[54.5, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_113.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 28]}
+          />
+          <group position={[1, 23, 33]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_114.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_115.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_116.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[19.5, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_117.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[37, 0.75, 28]}
+          />
+          <group position={[1, 23.75, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_118.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_119.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[36.75, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_120.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_121.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_122.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <group position={[54.25, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_123.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_124.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_125.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[35, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_126.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[52.5, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_127.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17.5, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_128.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[71, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_129.geometry}
+            material={materials["Plastic03-basecolor"]}
+            position={[0, 3.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_130.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 4.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_131.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 18.75]}
+          />
+          <group position={[1.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_132.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_133.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_134.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_135.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[19.25, 0, 29.25]}
+          />
+        </group>
+        <group position={[85.125, 63.375, 54]} rotation={[0, 0, -Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_136.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_137.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[16.938, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_138.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[14.5, 0.75, 34.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_139.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 12.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_140.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[24, 0.75, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_141.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 35.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_142.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_143.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[20.313, 12.5, 0.75]}
+          />
+          <group position={[0, 0.75, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_144.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_145.geometry}
+              material={materials.material}
+            />
+          </group>
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_146.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_147.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_148.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[23.75, 1.5, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_149.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+        </group>
+        <group position={[73.875, 63.375, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <group position={[1.75, 0, 5.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_150.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_151.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_152.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 12]}
+          />
+          <group position={[2, 0.75, 33.5]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_153.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_154.geometry}
+              material={materials.edge_color562615255}
+            />
+          </group>
+          <group position={[1, 23, 33]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_155.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_156.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1, 23.75, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_157.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_158.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1.75, 0, 13.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_159.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_160.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_161.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_162.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_163.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_164.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 20]}
+          />
+          <group position={[23, 1.5, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_165.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_166.geometry}
+              material={materials.material}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_167.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 4.75]}
+          />
+          <group position={[0, 3.75, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_168.geometry}
+              material={materials["Plastic03-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_169.geometry}
+              material={materials.material}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_170.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[22, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_171.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 4]}
+          />
+          <group position={[1.75, 0, 21.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_172.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_173.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1.75, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_174.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_175.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[85.125, 39.375, 54]} rotation={[0, 0, -Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_176.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.667, 0.75, 1.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_177.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <group position={[42.25, 1.5, 0.75]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_178.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_179.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_180.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[42.25, 1.5, 23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_181.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[42.25, 1.5, 12.25]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_182.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_183.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_184.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[42.25, 1.5, 35.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_185.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_186.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_187.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[40.938, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_188.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[38.5, 0.75, 34.5]}
+          />
+          <group position={[32.417, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_189.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_190.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_191.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_192.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[44.313, 12.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_193.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[47.75, 1.5, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_194.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[48, 0.75, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_195.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[15.333, 0.75, 1.5]}
+          />
+          <group position={[0, 0.75, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_196.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_197.geometry}
+              material={materials.material}
+            />
+          </group>
+          <group position={[17.083, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_198.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_199.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_200.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[73.875, 39.375, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <group position={[32.417, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_201.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_202.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_203.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1.75, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_204.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_205.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_206.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[2, 0.75, 33.5]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_207.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_208.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_209.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[17.083, 0, 29.25]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_210.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_211.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_212.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[32.417, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_213.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_214.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_215.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_216.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[47, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_217.geometry}
+            material={materials["Plastic03-basecolor"]}
+            position={[0, 3.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_218.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 28]}
+          />
+          <group position={[1, 23, 33]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_219.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_220.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <group position={[1, 23.75, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_221.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_222.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_223.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_224.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17.333, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_225.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[15.333, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_226.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[32.667, 0.75, 28]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_227.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_228.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 4]}
+          />
+          <group position={[1, 1.5, 4.75]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_229.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_230.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_231.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[46, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_232.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.667, 0.75, 5.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_233.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 18.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_234.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 4]}
+          />
+          <group position={[1.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_235.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_236.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_237.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[-68.958, -56.625, 8.75]}>
+          <lineSegments
+            geometry={nodes.Material2_238.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_239.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_240.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_241.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_242.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_243.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_244.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_245.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_246.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_247.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_248.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_249.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_250.geometry}
+            material={materials.edge_color000255}
+          />
+        </group>
+        <group
+          position={[85.125, -8.625, 77.75]}
+          rotation={[0, 0, -Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_251.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, -23.75]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_252.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, -23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_253.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[26.938, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_254.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[24.5, 0.75, 10.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_255.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.25, 1.5, 0.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_256.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[17, 0.75, -22.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_257.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[36, 0.75, -23.75]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_258.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[32.313, 12.5, -23]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_259.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[30.25, 1.5, 11.5]}
+          />
+          <group position={[18.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_260.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_261.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_262.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[35, 1.5, -23.75]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_263.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_264.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+        </group>
+        <group position={[85.125, -44.625, 54]} rotation={[0, 0, -Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_265.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[11, 0.75, 1.5]}
+          />
+          <group position={[12.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_266.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_267.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_268.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[14.5, 0.75, 34.5]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_269.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[16.938, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_270.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 35.25]}
+          />
+          <group position={[18.25, 1.5, 0.75]}>
+            <lineSegments
+              geometry={nodes.Material2_271.geometry}
+              material={materials.edge_color000255}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_272.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_273.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[20.313, 12.5, 0.75]}
+          />
+          <group position={[1.75, 0, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_274.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_275.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_276.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[24, 0.75, 0]}
+            scale={[-1, 1, 1]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_277.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 12.25]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_278.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[18.25, 1.5, 23.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_279.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_280.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_281.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[23.75, 1.5, 0]}
+            scale={[-1, 1, 1]}
+          />
+        </group>
+        <group position={[73.875, -44.625, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <group position={[2, 0.75, 33.5]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_282.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_283.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_284.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0.25, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_285.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_286.geometry}
+            material={materials["Plastic03-basecolor"]}
+            position={[0, 3.75, 0]}
+          />
+          <group position={[1, 23, 33]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_287.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_288.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_289.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[2, 0.75, 28]}
+          />
+          <group position={[1, 23.75, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_290.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_291.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_292.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[23, 1.5, 0]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_293.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[11, 0.75, 5.5]}
+          />
+          <group position={[1.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_294.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_295.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_296.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 18.75]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_297.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[22, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_298.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[0, 0.75, 4]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_299.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[1, 1.5, 4.75]}
+          />
+          <group position={[12.75, 0, 4]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_300.geometry}
+              material={materials["Wood09-basecolor"]}
+            />
+            <lineSegments
+              geometry={nodes.Material2_301.geometry}
+              material={materials.edge_color000255}
+            />
+          </group>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_302.geometry}
+            material={materials["Wood09-basecolor"]}
+            position={[22.25, 0, 29.25]}
+            rotation={[0, 0, Math.PI / 2]}
+          />
+        </group>
+        <group position={[-77.625, 64.875, 34.375]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_303.geometry}
+            material={materials["Terrazo03-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_304.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[73.875, -68.625, 34.375]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_305.geometry}
+            material={materials["Terrazo03-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_306.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[73.875, -8.625, 34.375]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_308.geometry}
+            material={materials["Terrazo03-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_309.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[0.375, 64.875, 34.375]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_310.geometry}
+            material={materials["Terrazo03-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_311.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[19.081, 65.677, 30.045]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_312.geometry}
+            material={materials.STAINLESSSTEAL}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_313.geometry}
+            material={materials.STAINLESSSTEAL}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_314.geometry}
+            material={materials.STAINLESSSTEAL}
+          />
+          <group position={[23.441, 8.065, -3.313]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_315.geometry}
+              material={materials["0134_DimGray"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material3.geometry}
+              material={materials.FAUCET}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_316.geometry}
+              material={materials.FAUCET}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_317.geometry}
+              material={materials.FAUCET}
+            />
+          </group>
+          <group position={[8.147, 8.065, -3.313]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_318.geometry}
+              material={materials["0134_DimGray"]}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material3_1.geometry}
+              material={materials.FAUCET}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_319.geometry}
+              material={materials.FAUCET}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_320.geometry}
+              material={materials.FAUCET}
+            />
+          </group>
+        </group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_321.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[172.375, 63.375, 4]}
+        />
+        <group position={[72.125, 63.125, 89.25]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_322.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_323.geometry}
+            material={materials.material}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_324.geometry}
+            material={materials.material}
+          />
+        </group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_325.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[72.125, 63.125, 81.688]}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_326.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[72.125, 63.125, 72.875]}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_327.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[72.125, 63.125, 64.063]}
+        />
+        <group position={[72.375, 63.375, 88.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_328.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_329.geometry}
+            material={materials.material}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_330.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[72.375, 63.375, 54]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_331.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_332.geometry}
+            material={materials.material}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_333.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[72.125, 63.125, 54.75]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_334.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_335.geometry}
+            material={materials.material}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_336.geometry}
+            material={materials.material}
+          />
+        </group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_337.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[-78.875, -69.875, 89.438]}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_338.geometry}
+          material={materials["Wood09-basecolor"]}
+          position={[95.875, 86.875, 55.5]}
+        />
+        <group position={[-77.625, 64.875, 33.938]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_339.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_340.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[0.375, -8.625, 33.938]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_341.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_342.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[73.875, -68.625, 33.938]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_343.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_344.geometry}
+            material={materials.material}
+          />
+        </group>
+        <group position={[74.195, -7.898, 24]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_345.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_346.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_347.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_348.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_349.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_350.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_351.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[74.195, -7.898, 5.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_352.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_353.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_354.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_355.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_356.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_357.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_358.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[74.195, -67.898, 5.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_359.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_360.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_361.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_362.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_363.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_364.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_365.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[74.195, -67.898, 24]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_366.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_367.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_368.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_369.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_370.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_371.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_372.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[74.195, 7.435, 24]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_373.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_374.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_375.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_376.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_377.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_378.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_379.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[74.195, 7.435, 5.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_380.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_381.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_382.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_383.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_384.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_385.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_386.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[74.195, 38.648, 5.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_387.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_388.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_389.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_390.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_391.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_392.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_393.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[74.195, 38.648, 24]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_394.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_395.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_396.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_397.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_398.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_399.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_400.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[74.195, -45.352, 5.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_401.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_402.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_403.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_404.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_405.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_406.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_407.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[74.195, -45.352, 24]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_408.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_409.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_410.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_411.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_412.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_413.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_414.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[71.648, 65.195, 24]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_415.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_416.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_417.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_418.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_419.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_420.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_421.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[71.648, 65.195, 5.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_422.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_423.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_424.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_425.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_426.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_427.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_428.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[1.102, 65.195, 5.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_429.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_430.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_431.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_432.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_433.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_434.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_435.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[1.102, 65.195, 24]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_436.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_437.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_438.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_439.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_440.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_441.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_442.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-76.898, 65.195, 5.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_443.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_444.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_445.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_446.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_447.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_448.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_449.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-76.898, 65.195, 24]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_450.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_451.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_452.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_453.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_454.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_455.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_456.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[54.148, 65.195, 24]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_457.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_458.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_459.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_460.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_461.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_462.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_463.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[54.148, 65.195, 5.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_464.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_465.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_466.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_467.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_468.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_469.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_470.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[-30.352, 65.195, 24]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_471.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_472.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_473.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_474.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_475.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_476.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_477.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[-30.352, 65.195, 5.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_478.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_479.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_480.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_481.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_482.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_483.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_484.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[-45.685, 65.195, 24]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_485.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_486.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_487.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_488.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_489.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_490.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_491.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[-45.685, 65.195, 5.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_492.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_493.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_494.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_495.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_496.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_497.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_498.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-45.685, 76.445, 84.5]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_499.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_500.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_501.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_502.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_503.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_504.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_505.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-45.685, 76.445, 55.5]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_506.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_507.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_508.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_509.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_510.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_511.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_512.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[71.648, 76.445, 84.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_513.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_514.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_515.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_516.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_517.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_518.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_519.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[71.648, 76.445, 55.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_520.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_521.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_522.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_523.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_524.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_525.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_526.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -67.898, 84.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_527.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_528.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_529.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_530.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_531.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_532.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_533.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, -45.352, 84.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_534.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_535.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_536.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_537.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_538.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_539.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_540.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -67.898, 55.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_541.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_542.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_543.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_544.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_545.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_546.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_547.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, -45.352, 55.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_548.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_549.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_550.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_551.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_552.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_553.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_554.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, 38.648, 55.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_555.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_556.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_557.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_558.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_559.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_560.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_561.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, 38.648, 84.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_562.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_563.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_564.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_565.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_566.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_567.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_568.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, 62.648, 55.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_569.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_570.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_571.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_572.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_573.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_574.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_575.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, 62.648, 84.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_576.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_577.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_578.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_579.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_580.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_581.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_582.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -7.898, 84.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_583.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_584.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_585.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_586.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_587.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_588.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_589.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -7.898, 55.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_590.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_591.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_592.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_593.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_594.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_595.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_596.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, -9.352, 79.25]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_597.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_598.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_599.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_600.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_601.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_602.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_603.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[85.445, -9.352, 84.5]}
+          rotation={[0, 0, -Math.PI]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_604.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_605.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_606.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_607.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_608.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_609.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_610.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -43.898, 84.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_611.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_612.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_613.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_614.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_615.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_616.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_617.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, -43.898, 79.25]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_618.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_619.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_620.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_621.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_622.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_623.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_624.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, 7.435, 84.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_625.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_626.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_627.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_628.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_629.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_630.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_631.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[85.445, 7.435, 55.5]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_632.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_633.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_634.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_635.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_636.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_637.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_638.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[1.102, 76.445, 55.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_639.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_640.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_641.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_642.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_643.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_644.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_645.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[1.102, 76.445, 84.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_646.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_647.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_648.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_649.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_650.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_651.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_652.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-0.352, 76.445, 67.75]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_653.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_654.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_655.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_656.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_657.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_658.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_659.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[-0.352, 76.445, 84.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_660.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_661.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_662.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_663.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_664.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_665.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_666.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-28.898, 76.445, 67.75]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_667.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_668.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_669.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_670.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_671.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_672.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_673.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-28.898, 76.445, 84.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_674.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_675.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_676.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_677.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_678.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_679.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_680.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[54.148, 76.445, 55.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_681.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_682.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_683.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_684.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_685.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_686.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_687.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[54.148, 76.445, 84.5]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_688.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_689.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_690.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_691.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_692.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_693.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_694.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-76.898, 76.445, 55.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_695.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_696.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_697.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_698.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_699.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_700.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_701.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-76.898, 76.445, 84.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_702.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_703.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_704.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_705.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_706.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_707.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_708.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-30.352, 76.445, 55.5]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_709.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_710.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_711.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_712.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_713.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_714.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_715.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[-30.352, 76.445, 84.5]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_716.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_717.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_718.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_719.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_720.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_721.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_722.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group position={[72.852, -58.966, 31.347]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_723.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_724.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-66.618, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_725.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_726.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[72.852, -54.347, 21.472]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_727.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_728.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-63.57, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_729.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_730.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, -2.299, 31.347]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_731.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_732.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 13.034, 31.347]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_733.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_734.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 28.368, 31.347]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_735.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_736.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 49.034, 31.347]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_737.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_738.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 49.034, 24.597]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_739.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_740.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 49.034, 16.597]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_741.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_742.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[72.852, 49.034, 8.597]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_743.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_744.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-51.284, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_745.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_746.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-35.951, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_747.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_748.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[12.466, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_749.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_750.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[29.966, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_751.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_752.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[47.466, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_753.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_754.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[64.966, 63.852, 31.347]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_755.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_756.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[72.852, -58.597, 21.472]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_757.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_758.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[72.852, 5.736, 21.472]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_759.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_760.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, 42.653, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_761.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_762.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, 25.32, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_763.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_764.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, 21.07, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_765.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_766.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, 5.736, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_767.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_768.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, -54.347, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_769.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_770.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, -58.597, 56.347]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_771.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_772.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-59.32, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_773.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_774.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-43.986, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_775.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_776.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[16.597, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_777.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_778.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[38.347, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_779.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_780.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[55.847, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_781.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_782.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[55.847, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_783.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_784.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[38.347, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_785.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_786.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[34.097, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_787.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_788.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[16.597, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_789.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_790.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-12.653, 75.102, 68.597]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_791.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_792.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-16.903, 75.102, 68.597]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_793.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_794.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-43.986, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_795.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_796.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-59.32, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_797.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_798.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[-63.57, 75.102, 56.347]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_799.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_800.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, -24.347, 80.097]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_801.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_802.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[84.102, -28.597, 80.097]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_803.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_804.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[34.097, 63.852, 21.472]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_805.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_806.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group
+          position={[18.625, 65.195, 24]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_807.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_808.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_809.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_810.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_811.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_812.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_813.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[18.625, 65.195, 5.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_814.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_815.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_816.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_817.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_818.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_819.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_820.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[18.602, 76.445, 55.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_821.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_822.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_823.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_824.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_825.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_826.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_827.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[18.602, 76.445, 84.5]}
+          rotation={[0, 0, -Math.PI / 2]}
+          scale={[-1, 1, 1]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_828.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_829.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_830.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_831.geometry}
+            material={materials.hardware}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_832.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_833.geometry}
+            material={materials.HingeGray}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_834.geometry}
+            material={materials.HingeGray}
+          />
+        </group>
+        <group
+          position={[72.852, 25.32, 21.472]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_835.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_836.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <group position={[106.764, 90.989, 36.202]} scale={0.809}>
+          <group position={[-25.93, -16.042, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_837.geometry}
+              material={materials.FAUCET}
+            />
+            <lineSegments
+              geometry={nodes.Material2_838.geometry}
+              material={materials.edge_color198198198255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_839.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_840.geometry}
+              material={materials.edge_color198198198255}
+            />
+            <group position={[0.17, 0, 6]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_842.geometry}
+                material={materials.FAUCET}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_843.geometry}
+                material={materials.Color_M06}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_844.geometry}
+                material={materials.FAUCET}
+              />
+            </group>
+            <group position={[1.23, 9.05, 1.721]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_845.geometry}
+                material={materials.FAUCET}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_846.geometry}
+                material={materials.FAUCET}
+              />
+            </group>
+            <group position={[0.15, 8.465, 0]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_847.geometry}
+                material={materials.FAUCET}
+              />
+              <lineSegments
+                geometry={nodes.Material2_848.geometry}
+                material={materials.edge_color000255}
+              />
+            </group>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_841.geometry}
+              material={materials.FAUCET}
+              position={[0.63, 0.196, 11.292]}
+            />
+          </group>
+        </group>
+        <group position={[56.764, 90.989, 36.202]} scale={0.809}>
+          <group position={[-25.93, -16.042, 0]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_849.geometry}
+              material={materials.FAUCET}
+            />
+            <lineSegments
+              geometry={nodes.Material2_850.geometry}
+              material={materials.edge_color198198198255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_851.geometry}
+              material={materials.edge_color000255}
+            />
+            <lineSegments
+              geometry={nodes.Material2_852.geometry}
+              material={materials.edge_color198198198255}
+            />
+            <group position={[0.17, 0, 6]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_854.geometry}
+                material={materials.FAUCET}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_855.geometry}
+                material={materials.Color_M06}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_856.geometry}
+                material={materials.FAUCET}
+              />
+            </group>
+            <group position={[1.23, 9.05, 1.721]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_857.geometry}
+                material={materials.FAUCET}
+              />
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_858.geometry}
+                material={materials.FAUCET}
+              />
+            </group>
+            <group position={[0.15, 8.465, 0]}>
+              <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Material2_859.geometry}
+                material={materials.FAUCET}
+              />
+              <lineSegments
+                geometry={nodes.Material2_860.geometry}
+                material={materials.edge_color000255}
+              />
+            </group>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Material2_853.geometry}
+              material={materials.FAUCET}
+              position={[0.63, 0.196, 11.292]}
+            />
+          </group>
+        </group>
+        <group position={[73.875, 22.271, 4]} rotation={[0, 0, -Math.PI / 2]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_861.geometry}
+            material={materials["Wood09-basecolor"]}
+          />
+          <lineSegments
+            geometry={nodes.Material2_862.geometry}
+            material={materials.edge_color000255}
+          />
+          <lineSegments
+            geometry={nodes.Material2_863.geometry}
+            material={materials.edge_color000255}
+          />
+        </group>
+        <group
+          position={[72.852, 21.049, 21.472]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Material2_864.geometry}
+            material={materials.hardware}
+          />
+          <lineSegments
+            geometry={nodes.Material2_865.geometry}
+            material={materials.edge_color220220220255}
+          />
+        </group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Material2_307.geometry}
+          material={materials.PLASTER}
+          position={[-79.625, -70.625, 90.938]}
+        />
+      </group>
+    </group>
+  );
+}
+
+useGLTF.preload('/kitchen_cabinets.glb');
+
+function Picker() {
+  const snap = useSnapshot(stateVillage);
+  if (!snap.current) {
+    console.log("its null here.")
+    return null; // or any other fallback UI when snap.current is null
+  }
+  return (
+    <div style={{ display: snap.current ? 'block' : 'none' }}>
+      <HexColorPicker
+        className="picker"
+        color={snap.items[snap.current]}
+        onChange={(color) => (stateVillage.items[snap.current] = color)}
+      />
+      <h1>{snap.current}</h1>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div className='main-board'>
+      {/* <div className='left'> */}
+      <Picker />
+      {/* </div> */}
+    <Canvas
+      camera={{ position: [2, 0, 12.25], fov: 60 }}
+      style={{
+         backgroundColor: '#e1e1e1',
+         width: '95vw',
+         height: '90vh',
+      }}
+   >
+      <ambientLight intensity={1.25} />
+      <ambientLight intensity={0.1} />
+      <directionalLight intensity={0.1} />
+      <Suspense fallback={null}>
+      <VillageModel  position={[-10.25, -200.9, -300]} />
+      </Suspense>
+      <OrbitControls 
+        enableDamping={false} 
+        minDistance={80}
+        maxDistance={180}
+      />
+   </Canvas>
+    </div>
+  )
+}

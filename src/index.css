@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.main-board{
+  width: 100%;
+  display: flex;
+  row-gap: 1rem;
+  align-items: start;
+}
+.main-board .left{
+  width: 200px;
+}
+.main-app{
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.menu{
+  padding: 10px 20px;
+  min-width: 100px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.menu_active{
+  background-color: #F61257;
+  color: white;
+}
+
+.color-picker-main{
+  position: absolute;
+  top: 80px;
+  left: 0px;
+  z-index: 1;
+}
+
+.left-options{
+  width: 100%;
+  display: none;
+  gap: 10px;
+}
+.option{
+  width: 50px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 6px;
+}
+.left-options .option:nth-child(1){
+  background-color: white;
+}
+.left-options .option:nth-child(2){
+  background-color: black;
+}
+
+.preloader{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.preloader .img{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.preloader .img img{
+  width: 100%;
+  height: 100%;
+}
+.inner-layer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  font-family: sans-serif;
+}
